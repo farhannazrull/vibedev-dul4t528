@@ -262,7 +262,7 @@
   .color-dreaming { background: #8b7e74; }
   .color-planning { background: #f0a500; }
   .color-visited  { background: #4a9e6f; }
-  .card-body { padding: 14px 16px 10px; }
+  .card-body { padding: 14px 16px 10px; cursor: pointer; }
   .card-body h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; font-weight: 400; letter-spacing: 0.02em; line-height: 1.1; color: #1a1a1a; }
   .card-body .loc { font-size: 0.7rem; font-weight: 700; color: #999; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
   .card-body .loc svg { width: 10px; height: 10px; }
@@ -289,6 +289,15 @@
   }
   .btn-del:hover { background: #ff3366; color: #fff; transform: translateY(-1px); }
   .btn-del svg { width: 12px; height: 12px; }
+  .btn-edit {
+    background: #fff; border: 1.5px solid #1a1a1a; color: #1a1a1a;
+    padding: 5px 8px; border-radius: 7px; font-size: 0.65rem; font-weight: 800;
+    cursor: pointer; transition: background 0.15s, transform 0.15s;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .btn-edit:hover { background: #f0a500; color: #fff; transform: translateY(-1px); }
+  .btn-edit svg { width: 12px; height: 12px; }
+  .btn-cancel { background: #fff; color: #1a1a1a; }
 
   @media (max-width: 900px) {
     .board-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -366,6 +375,7 @@
         </div>
       </div>
       <button class="btn btn-primary" id="btnAdd">+ Add</button>
+      <button class="btn btn-cancel" id="btnCancel" style="display:none">Cancel</button>
     </div>
   </section>
 
@@ -390,8 +400,10 @@
   const totalCount = $('totalCount');
   const statsBar = $('statsBar');
   const formStatusSelect = $('formStatusSelect');
+  const btnCancel = $('btnCancel');
 
   let formStatusValue = 'Dreaming';
+  let editingId = null;
 
   function load() {
     try {
@@ -420,6 +432,7 @@
   }
 
   function deleteDestination(id) {
+    if (!confirm('Remove this destination?')) return;
     destinations = destinations.filter(d => d.id !== id);
     save();
     render();
@@ -529,7 +542,7 @@
             ${items.length ? items.map(d => `
               <div class="card" draggable="true" data-id="${d.id}" ondragstart="window.__dragStart(event,${d.id})" ondragend="this.classList.remove('dragging')">
                 <span class="card-color ${barClass[d.status]}"></span>
-                <div class="card-body">
+                <div class="card-body" onclick="window.__cycle(${d.id})" title="Click to promote">
                   <h4>${esc(d.name)}</h4>
                   <div class="loc"><i data-feather="map-pin"></i> ${esc(d.country)}</div>
                   ${d.note ? `<p class="note">${esc(d.note)}</p>` : ''}
@@ -544,6 +557,7 @@
                       ${optValues.map(v => `<button class="cselect-opt${v === d.status ? ' selected' : ''}" data-value="${v}">${v}</button>`).join('')}
                     </div>
                   </div>
+                  <button class="btn-edit" onclick="window.__edit(${d.id})" title="Edit"><i data-feather="edit-3"></i></button>
                   <button class="btn-del" onclick="window.__delete(${d.id})"><i data-feather="trash-2"></i></button>
                 </div>
               </div>`).join('')
@@ -565,20 +579,62 @@
     });
   }
 
+  function resetForm() {
+    inputName.value = ''; inputCountry.value = ''; inputNote.value = '';
+    setSelectValue(formStatusSelect, 'Dreaming');
+    formStatusValue = 'Dreaming';
+    editingId = null;
+    btnAdd.textContent = '+ Add';
+    btnCancel.style.display = 'none';
+    inputName.focus();
+  }
+
   function handleAdd() {
     const name = inputName.value.trim();
     const country = inputCountry.value.trim();
     const note = inputNote.value.trim();
     const status = formStatusValue;
     if (!name || !country) return;
-    addDestination(name, country, note, status);
-    inputName.value = ''; inputCountry.value = ''; inputNote.value = '';
-    setSelectValue(formStatusSelect, 'Dreaming');
-    formStatusValue = 'Dreaming';
-    inputName.focus();
+    if (editingId !== null) {
+      const d = destinations.find(d => d.id === editingId);
+      if (d) {
+        d.name = name; d.country = country; d.note = note; d.status = status;
+        save(); render();
+      }
+      resetForm();
+    } else {
+      addDestination(name, country, note, status);
+    }
+    resetForm();
   }
 
   let draggedId = null;
+
+  function cycleStatus(id) {
+    const d = destinations.find(d => d.id === id);
+    if (!d) return;
+    const order = ['Dreaming', 'Planning', 'Visited'];
+    const idx = order.indexOf(d.status);
+    d.status = idx === order.length - 1 ? order[0] : order[idx + 1];
+    save(); render();
+  }
+
+  window.__cycle = cycleStatus;
+
+  window.__edit = function(id) {
+    const d = destinations.find(d => d.id === id);
+    if (!d) return;
+    inputName.value = d.name;
+    inputCountry.value = d.country;
+    inputNote.value = d.note || '';
+    editingId = d.id;
+    btnAdd.textContent = 'Update';
+    btnCancel.style.display = '';
+    setSelectValue(formStatusSelect, d.status);
+    formStatusValue = d.status;
+    inputName.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   window.__dragStart = function(e, id) {
     draggedId = id;
@@ -609,6 +665,7 @@
   });
 
   btnAdd.addEventListener('click', handleAdd);
+  btnCancel.addEventListener('click', resetForm);
   [inputName, inputCountry, inputNote].forEach(el => {
     el.addEventListener('keydown', e => { if (e.key === 'Enter') handleAdd(); });
   });
