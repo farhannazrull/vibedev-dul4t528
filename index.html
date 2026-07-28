@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wanderlist — Travel Bucket List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+<style>
+  html, body { height: 100%; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f2ece4;
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+  }
+  ::selection { background: #ff3366; color: #fff; }
+  .container { max-width: 1320px; margin: 0 auto; padding: 0 20px; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+
+  /* ── Hero ── */
+  .hero {
+    padding-top: 20px;
+    position: relative;
+  }
+  .hero .hero-inner-wrap { padding: 0; }
+  .hero-card {
+    position: relative;
+    border: 2px solid #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    overflow: hidden;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff5e6;
+    margin: 0 20px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-bg .circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,51,102,0.08);
+  }
+  .hero-bg .circle:nth-child(1) { width:180px;height:180px;top:-50px;left:-40px;background:rgba(240,165,0,0.12); }
+  .hero-bg .circle:nth-child(2) { width:220px;height:220px;top:-60px;right:-50px; }
+  .hero-bg .circle:nth-child(3) { width:120px;height:120px;bottom:-30px;left:30%;background:rgba(240,165,0,0.08); }
+  .hero-bg .circle:nth-child(4) { width:60px;height:60px;bottom:30px;right:15%;background:rgba(255,51,102,0.15); }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 6px 14px; border: 2px solid #1a1a1a; border-radius: 999px;
+    background: #ff3366; color: #fff; margin-bottom: 14px;
+  }
+  .hero-tag svg { width: 13px; height: 13px; }
+  .hero-text { flex: 1; }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; font-weight: 400; letter-spacing: 0.03em; line-height: 0.85;
+    margin-bottom: 6px;
+    color: #1a1a1a;
+  }
+  .hero h1 span { color: #ff3366; }
+  .hero .sub {
+    font-size: 0.85rem; font-weight: 700; color: #666;
+    margin: 0;
+  }
+  .hero-big {
+    flex-shrink: 0;
+    text-align: center;
+    background: #fff;
+    border: 2px solid #1a1a1a;
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: 3px 3px 0 #1a1a1a;
+  }
+  .hero-big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; line-height: 0.85; color: #ff3366;
+  }
+  .hero-big-label {
+    font-size: 0.55rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #999; display: block; margin-top: 2px;
+  }
+  .hero-stats {
+    padding: 20px 0 16px;
+  }
+  .hero-stats .container { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  .hero-stat {
+    display: flex; align-items: center; gap: 14px;
+    padding: 6px 20px 6px 6px; border: 2px solid #1a1a1a; border-radius: 12px;
+    background: #ffffff; transition: transform 0.15s, box-shadow 0.15s; min-width: 160px;
+  }
+  .hero-stat:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .hero-stat-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 8px; border: 2px solid #1a1a1a;
+    flex-shrink: 0; color: #fff;
+  }
+  .hero-stat-icon svg { width: 16px; height: 16px; stroke-width: 2.5; }
+  .icon-dreaming { background: #8b7e74; }
+  .icon-planning { background: #e8a838; }
+  .icon-visited  { background: #4a9e6f; }
+  .hero-stat-info { display: flex; flex-direction: column; }
+  .hero-stat-info .label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #999; }
+  .hero-stat-info .num { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; font-weight: 400; line-height: 1; letter-spacing: 0.02em; color: #1a1a1a; }
+  .num-dreaming { color: #8b7e74 !important; }
+  .num-planning { color: #d4941a !important; }
+  .num-visited  { color: #4a9e6f !important; }
+
+  /* ── Form ── */
+  .form-section { position: relative; z-index: 15; padding-top: 4px; }
+  .form-inner {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 12px; padding-bottom: 8px; flex-wrap: wrap;
+  }
+  .form-inner input {
+    padding: 11px 14px; border: 2px solid #1a1a1a; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+    background: #fefcf9; color: #1a1a1a; outline: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    flex: 1; min-width: 120px;
+  }
+  .form-inner input:focus {
+    transform: translateY(-2px); box-shadow: 4px 4px 0 #ff3366;
+  }
+  .form-inner input::placeholder { font-weight: 600; color: #aaa; }
+  .btn {
+    padding: 11px 24px; border: 2px solid #1a1a1a; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 900;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .btn:active { transform: translateY(0); box-shadow: none; }
+  .btn-primary { background: #ff3366; color: #fff; }
+
+  /* ── Custom Select ── */
+  .cselect {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .cselect-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 14px;
+    border: 2px solid #1a1a1a;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: #fff;
+    color: #1a1a1a;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+    min-width: 130px;
+  }
+  .cselect-trigger.open { transform: translateY(-2px); box-shadow: 4px 4px 0 #ff3366; }
+  .cselect-trigger svg {
+    width: 12px; height: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .cselect-trigger.open svg { transform: rotate(180deg); }
+  .cselect-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 2px solid #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    z-index: 50;
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .cselect-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .cselect-opt {
+    display: block;
+    width: 100%;
+    padding: 9px 14px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: #fff;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s;
+  }
+  .cselect-opt:hover { background: #f0ede8; }
+  .cselect-opt.selected { background: #ff3366; color: #fff; }
+
+  /* ── Board ── */
+  .board-wrap { background: #fff; border-radius: 20px 20px 0 0; flex: 1; padding-bottom: 24px; box-shadow: 0 -4px 16px rgba(0,0,0,0.04); }
+  .board { padding: 8px 0 0; }
+  .board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+  .board-col {
+    background: #f5f0ea; border: 2px solid #1a1a1a; border-radius: 14px;
+    min-height: 200px; box-shadow: 5px 5px 0 #1a1a1a;
+  }
+  .board-col-header {
+    padding: 14px 18px; border-radius: 12px 12px 0 0; background: #fff;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .board-col-header-left { display: flex; align-items: center; gap: 8px; }
+  .board-col-header svg { width: 18px; height: 18px; stroke-width: 2.5; flex-shrink: 0; }
+  .board-col-header h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.04em; line-height: 1; }
+  .board-col-header .count { font-size: 0.7rem; font-weight: 900; padding: 3px 10px; border: 2px solid #1a1a1a; border-radius: 7px; background: #fff; }
+  .col-cards { padding: 14px; display: flex; flex-direction: column; gap: 12px; min-height: 80px; }
+  .col-empty {
+    text-align: center; padding: 24px 12px; font-size: 0.75rem; font-weight: 700;
+    color: #bbb; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #fefcf9; border: 2px solid #1a1a1a; border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: slideIn 0.3s ease-out both;
+    cursor: grab;
+  }
+  .card:active { cursor: grabbing; }
+  .card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .card.dragging { opacity: 0.3; }
+  .col-cards.drag-over { background: #f0ebe3; border-radius: 10px; }
+  .card-color { display: block; height: 4px; border-radius: 10px 10px 0 0; }
+  .color-dreaming { background: #8b7e74; }
+  .color-planning { background: #f0a500; }
+  .color-visited  { background: #4a9e6f; }
+  .card-body { padding: 14px 16px 10px; }
+  .card-body h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; font-weight: 400; letter-spacing: 0.02em; line-height: 1.1; color: #1a1a1a; }
+  .card-body .loc { font-size: 0.7rem; font-weight: 700; color: #999; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
+  .card-body .loc svg { width: 10px; height: 10px; }
+  .card-body .note {
+    font-size: 0.75rem; font-weight: 600; line-height: 1.5; color: #555;
+    padding: 8px 10px; margin-top: 8px; background: #f8f5f0; border-radius: 8px;
+  }
+  .card-foot {
+    padding: 8px 12px 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .card-foot .cselect-trigger {
+    padding: 5px 10px; font-size: 0.65rem; border-radius: 7px; border-width: 1.5px;
+    min-width: 0; flex: 1;
+  }
+  .card-foot .cselect-trigger svg { width: 10px; height: 10px; }
+  .card-foot .cselect-trigger.open { transform: translateY(-1px); box-shadow: 2px 2px 0 #ff3366; }
+  .card-foot .cselect-menu { border-width: 1.5px; border-radius: 8px; box-shadow: 3px 3px 0 #1a1a1a; }
+  .card-foot .cselect-opt { padding: 6px 10px; font-size: 0.65rem; border-bottom-width: 1px; }
+  .btn-del {
+    background: #fff; border: 1.5px solid #1a1a1a; color: #1a1a1a;
+    padding: 5px 8px; border-radius: 7px; font-size: 0.65rem; font-weight: 800;
+    cursor: pointer; transition: background 0.15s, transform 0.15s;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .btn-del:hover { background: #ff3366; color: #fff; transform: translateY(-1px); }
+  .btn-del svg { width: 12px; height: 12px; }
+
+  @media (max-width: 900px) {
+    .board-grid { grid-template-columns: 1fr; gap: 16px; }
+    .board-col { min-height: auto; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding-top: 14px; }
+    .hero-card { height: auto; min-height: 200px; margin: 0 14px; }
+    .hero-content { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .hero h1 { font-size: 2.8rem; }
+    .hero-big { padding: 10px 18px; align-self: stretch; display: flex; align-items: center; gap: 10px; }
+    .hero-big-num { font-size: 2rem; }
+    .hero-big-label { margin-top: 0; }
+    .hero-big-num { font-size: 2rem; }
+    .hero-stats { padding: 10px 0; }
+    .hero-stat { min-width: auto; flex: 1; padding: 4px 14px 4px 4px; gap: 10px; }
+    .hero-stat-icon { width: 30px; height: 30px; }
+    .hero-stat-icon svg { width: 14px; height: 14px; }
+    .hero-stat-info .label { font-size: 0.55rem; }
+    .hero-stat-info .num { font-size: 1.3rem; }
+    .form-inner { padding-top: 8px; padding-bottom: 6px; }
+    .form-inner input, .cselect-trigger { font-size: 0.8rem; padding: 9px 10px; }
+    .btn { padding: 9px 16px; font-size: 0.8rem; }
+    .board-wrap { border-radius: 14px 14px 0 0; padding-bottom: 24px; }
+    .board { padding: 6px 0 0; }
+    .col-cards { padding: 10px; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container hero-inner-wrap">
+    <div class="hero-card">
+      <div class="hero-bg">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-tag"><i data-feather="compass"></i> Explore the world</div>
+          <h1>Wander<span>list</span></h1>
+          <p class="sub">Your dream destinations, collected in one place</p>
+        </div>
+        <div class="hero-big">
+          <div class="hero-big-num" id="totalCount">0</div>
+          <span class="hero-big-label">Destinations</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="container" id="statsBar"></div>
+  </div>
+</section>
+
+<div class="board-wrap">
+  <section class="form-section">
+    <div class="container form-inner">
+      <input type="text" id="inputName" placeholder="Destination" autocomplete="off">
+      <input type="text" id="inputCountry" placeholder="Country" autocomplete="off">
+      <input type="text" id="inputNote" placeholder="Why go?" autocomplete="off">
+      <div class="cselect" id="formStatusSelect">
+        <button class="cselect-trigger" data-value="Dreaming">
+          <span>Dreaming</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cselect-menu">
+          <button class="cselect-opt selected" data-value="Dreaming">Dreaming</button>
+          <button class="cselect-opt" data-value="Planning">Planning</button>
+          <button class="cselect-opt" data-value="Visited">Visited</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btnAdd">+ Add</button>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="container">
+      <div class="board-grid" id="boardGrid"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'wanderlist_destinations';
+  let destinations = [];
+
+  const $ = id => document.getElementById(id);
+  const inputName = $('inputName');
+  const inputCountry = $('inputCountry');
+  const inputNote = $('inputNote');
+  const btnAdd = $('btnAdd');
+  const boardGrid = $('boardGrid');
+  const totalCount = $('totalCount');
+  const statsBar = $('statsBar');
+  const formStatusSelect = $('formStatusSelect');
+
+  let formStatusValue = 'Dreaming';
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      destinations = raw ? JSON.parse(raw) : [];
+    } catch { destinations = []; }
+  }
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(destinations));
+  }
+
+  function nextId() {
+    return destinations.length ? Math.max(...destinations.map(d => d.id)) + 1 : 1;
+  }
+
+  function addDestination(name, country, note, status) {
+    destinations.push({ id: nextId(), name, country, note, status });
+    save();
+    render();
+  }
+
+  function updateStatus(id, newStatus) {
+    const d = destinations.find(d => d.id === id);
+    if (d) { d.status = newStatus; save(); render(); }
+  }
+
+  function deleteDestination(id) {
+    destinations = destinations.filter(d => d.id !== id);
+    save();
+    render();
+  }
+
+  function esc(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function initCustomSelect(container, onChange) {
+    const trigger = container.querySelector('.cselect-trigger');
+    const menu = container.querySelector('.cselect-menu');
+    const span = trigger.querySelector('span');
+
+    function close() {
+      menu.classList.remove('open');
+      trigger.classList.remove('open');
+    }
+
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = menu.classList.contains('open');
+      document.querySelectorAll('.cselect-menu.open').forEach(m => {
+        if (m !== menu) m.classList.remove('open');
+      });
+      document.querySelectorAll('.cselect-trigger.open').forEach(t => {
+        if (t !== trigger) t.classList.remove('open');
+      });
+      if (isOpen) { close(); return; }
+      menu.classList.add('open');
+      trigger.classList.add('open');
+    });
+
+    menu.querySelectorAll('.cselect-opt').forEach(opt => {
+      opt.addEventListener('click', function() {
+        const value = this.getAttribute('data-value');
+        span.textContent = this.textContent;
+        trigger.setAttribute('data-value', value);
+        menu.querySelectorAll('.cselect-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        close();
+        if (onChange) onChange(value);
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!container.contains(e.target)) close();
+    });
+  }
+
+  function setSelectValue(container, value) {
+    const trigger = container.querySelector('.cselect-trigger');
+    const span = trigger.querySelector('span');
+    trigger.setAttribute('data-value', value);
+    const opts = container.querySelectorAll('.cselect-opt');
+    opts.forEach(o => {
+      if (o.getAttribute('data-value') === value) {
+        span.textContent = o.textContent;
+        o.classList.add('selected');
+      } else {
+        o.classList.remove('selected');
+      }
+    });
+  }
+
+  function render() {
+    totalCount.textContent = destinations.length;
+
+    const cols = [
+      { key: 'Dreaming', icon: 'circle', label: 'Dreaming' },
+      { key: 'Planning', icon: 'check', label: 'Planning' },
+      { key: 'Visited', icon: 'check-circle', label: 'Visited' }
+    ];
+
+    const icons = { Dreaming: 'circle', Planning: 'check', Visited: 'check-circle' };
+    const barClass = { Dreaming: 'color-dreaming', Planning: 'color-planning', Visited: 'color-visited' };
+
+    const counts = { Dreaming: 0, Planning: 0, Visited: 0 };
+    destinations.forEach(d => counts[d.status]++);
+
+    statsBar.innerHTML = cols.map(c => `
+      <div class="hero-stat">
+        <div class="hero-stat-icon icon-${c.key.toLowerCase()}"><i data-feather="${c.icon}"></i></div>
+        <div class="hero-stat-info">
+          <span class="label">${c.label}</span>
+          <span class="num num-${c.key.toLowerCase()}">${counts[c.key]}</span>
+        </div>
+      </div>
+    `).join('');
+
+    const optValues = ['Dreaming', 'Planning', 'Visited'];
+
+    boardGrid.innerHTML = cols.map(c => {
+      const items = destinations.filter(d => d.status === c.key);
+      return `
+        <div class="board-col" data-status="${c.key}" ondragover="event.preventDefault()" ondragenter="this.classList.add('drag-over')" ondragleave="if(!this.contains(event.relatedTarget))this.classList.remove('drag-over')" ondrop="window.__drop(event)">
+          <div class="board-col-header">
+            <div class="board-col-header-left">
+              <i data-feather="${c.icon}"></i>
+              <h3>${c.label}</h3>
+            </div>
+            <span class="count">${items.length}</span>
+          </div>
+          <div class="col-cards">
+            ${items.length ? items.map(d => `
+              <div class="card" draggable="true" data-id="${d.id}" ondragstart="window.__dragStart(event,${d.id})" ondragend="this.classList.remove('dragging')">
+                <span class="card-color ${barClass[d.status]}"></span>
+                <div class="card-body">
+                  <h4>${esc(d.name)}</h4>
+                  <div class="loc"><i data-feather="map-pin"></i> ${esc(d.country)}</div>
+                  ${d.note ? `<p class="note">${esc(d.note)}</p>` : ''}
+                </div>
+                <div class="card-foot">
+                  <div class="cselect" data-id="${d.id}">
+                    <button class="cselect-trigger" data-value="${esc(d.status)}">
+                      <span>${esc(d.status)}</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="cselect-menu">
+                      ${optValues.map(v => `<button class="cselect-opt${v === d.status ? ' selected' : ''}" data-value="${v}">${v}</button>`).join('')}
+                    </div>
+                  </div>
+                  <button class="btn-del" onclick="window.__delete(${d.id})"><i data-feather="trash-2"></i></button>
+                </div>
+              </div>`).join('')
+            : `<div class="col-empty">No destinations</div>`}
+          </div>
+        </div>`;
+    }).join('');
+
+    if (typeof feather !== 'undefined') feather.replace();
+
+    document.querySelectorAll('.cselect').forEach(el => {
+      if (el.id === 'formStatusSelect') return;
+      if (el.dataset.initialized) return;
+      el.dataset.initialized = '1';
+      const id = parseInt(el.getAttribute('data-id'));
+      initCustomSelect(el, function(val) {
+        window.__update(id, val);
+      });
+    });
+  }
+
+  function handleAdd() {
+    const name = inputName.value.trim();
+    const country = inputCountry.value.trim();
+    const note = inputNote.value.trim();
+    const status = formStatusValue;
+    if (!name || !country) return;
+    addDestination(name, country, note, status);
+    inputName.value = ''; inputCountry.value = ''; inputNote.value = '';
+    setSelectValue(formStatusSelect, 'Dreaming');
+    formStatusValue = 'Dreaming';
+    inputName.focus();
+  }
+
+  let draggedId = null;
+
+  window.__dragStart = function(e, id) {
+    draggedId = id;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  window.__drop = function(e) {
+    e.preventDefault();
+    const col = e.currentTarget;
+    col.classList.remove('drag-over');
+    if (draggedId === null) return;
+    const newStatus = col.getAttribute('data-status');
+    const d = destinations.find(d => d.id === draggedId);
+    if (d && d.status !== newStatus) {
+      d.status = newStatus;
+      save();
+      render();
+    }
+    draggedId = null;
+  };
+
+  window.__update = updateStatus;
+  window.__delete = deleteDestination;
+
+  initCustomSelect(formStatusSelect, function(val) {
+    formStatusValue = val;
+  });
+
+  btnAdd.addEventListener('click', handleAdd);
+  [inputName, inputCountry, inputNote].forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') handleAdd(); });
+  });
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>
