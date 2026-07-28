@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PSI Pilot — Bike Tire Pressure Checker</title>
+<title>Wanderlist — Travel Bucket List</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Inter', sans-serif;
     background: #f2ece4;
@@ -16,392 +17,425 @@
     display: flex;
     flex-direction: column;
   }
-  ::selection { background: #1a1a1a; color: #fff; }
+  ::selection { background: #ff3366; color: #fff; }
+  .container { max-width: 1320px; margin: 0 auto; padding: 0 20px; }
 
-  .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
 
   /* ── Hero ── */
   .hero {
-    background: #1a1a2e;
-    color: #fff;
-    padding: 32px 0 28px;
+    padding-top: 20px;
+    position: relative;
   }
+  .hero .hero-inner-wrap { padding: 0; }
+  .hero-card {
+    position: relative;
+    border: 2px solid #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    overflow: hidden;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff5e6;
+    margin: 0 20px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-bg .circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,51,102,0.08);
+  }
+  .hero-bg .circle:nth-child(1) { width:180px;height:180px;top:-50px;left:-40px;background:rgba(240,165,0,0.12); }
+  .hero-bg .circle:nth-child(2) { width:220px;height:220px;top:-60px;right:-50px; }
+  .hero-bg .circle:nth-child(3) { width:120px;height:120px;bottom:-30px;left:30%;background:rgba(240,165,0,0.08); }
+  .hero-bg .circle:nth-child(4) { width:60px;height:60px;bottom:30px;right:15%;background:rgba(255,51,102,0.15); }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 6px 14px; border: 2px solid #1a1a1a; border-radius: 999px;
+    background: #ff3366; color: #fff; margin-bottom: 14px;
+  }
+  .hero-tag svg { width: 13px; height: 13px; }
+  .hero-text { flex: 1; }
   .hero h1 {
-    font-size: 2.4rem; font-weight: 900; letter-spacing: -0.02em;
-    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; font-weight: 400; letter-spacing: 0.03em; line-height: 0.85;
+    margin-bottom: 6px;
+    color: #1a1a1a;
   }
-  .hero h1 span { color: #4fc3a1; }
+  .hero h1 span { color: #ff3366; }
   .hero .sub {
-    font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.55);
-    margin-top: 4px;
+    font-size: 0.85rem; font-weight: 700; color: #666;
+    margin: 0;
+  }
+  .hero-big {
+    flex-shrink: 0;
+    text-align: center;
+    background: #fff;
+    border: 2px solid #1a1a1a;
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: 3px 3px 0 #1a1a1a;
+  }
+  .hero-big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; line-height: 0.85; color: #ff3366;
+  }
+  .hero-big-label {
+    font-size: 0.55rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #999; display: block; margin-top: 2px;
+  }
+  .hero-stats {
+    padding: 20px 0 16px;
+  }
+  .hero-stats .container { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  .hero-stat {
+    display: flex; align-items: center; gap: 14px;
+    padding: 6px 20px 6px 6px; border: 2px solid #1a1a1a; border-radius: 12px;
+    background: #ffffff; transition: transform 0.15s, box-shadow 0.15s; min-width: 160px;
+  }
+  .hero-stat:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .hero-stat-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 8px; border: 2px solid #1a1a1a;
+    flex-shrink: 0; color: #fff;
+  }
+  .hero-stat-icon svg { width: 16px; height: 16px; stroke-width: 2.5; }
+  .icon-dreaming { background: #8b7e74; }
+  .icon-planning { background: #e8a838; }
+  .icon-visited  { background: #4a9e6f; }
+  .hero-stat-info { display: flex; flex-direction: column; }
+  .hero-stat-info .label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #999; }
+  .hero-stat-info .num { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; font-weight: 400; line-height: 1; letter-spacing: 0.02em; color: #1a1a1a; }
+  .num-dreaming { color: #8b7e74 !important; }
+  .num-planning { color: #d4941a !important; }
+  .num-visited  { color: #4a9e6f !important; }
+
+  /* ── Form ── */
+  .form-section { position: relative; z-index: 15; padding-top: 4px; }
+  .form-inner {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 12px; padding-bottom: 8px; flex-wrap: wrap;
+  }
+  .form-inner input {
+    padding: 11px 14px; border: 2px solid #1a1a1a; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+    background: #fefcf9; color: #1a1a1a; outline: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    flex: 1; min-width: 120px;
+  }
+  .form-inner input:focus {
+    transform: translateY(-2px); box-shadow: 4px 4px 0 #ff3366;
+  }
+  .form-inner input::placeholder { font-weight: 600; color: #aaa; }
+  .btn {
+    padding: 11px 24px; border: 2px solid #1a1a1a; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 900;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .btn:active { transform: translateY(0); box-shadow: none; }
+  .btn-primary { background: #ff3366; color: #fff; }
+
+  /* ── Custom Select ── */
+  .cselect {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .cselect-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 14px;
+    border: 2px solid #1a1a1a;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: #fff;
+    color: #1a1a1a;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+    min-width: 130px;
+  }
+  .cselect-trigger.open { transform: translateY(-2px); box-shadow: 4px 4px 0 #ff3366; }
+  .cselect-trigger svg {
+    width: 12px; height: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .cselect-trigger.open svg { transform: rotate(180deg); }
+  .cselect-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 2px solid #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    z-index: 50;
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .cselect-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .cselect-opt {
+    display: block;
+    width: 100%;
+    padding: 9px 14px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: #fff;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s;
+  }
+  .cselect-opt:hover { background: #f0ede8; }
+  .cselect-opt.selected { background: #ff3366; color: #fff; }
+
+  /* ── Board ── */
+  .board-wrap { background: #fff; border-radius: 20px 20px 0 0; flex: 1; padding-bottom: 24px; box-shadow: 0 -4px 16px rgba(0,0,0,0.04); }
+  .board { padding: 8px 0 0; }
+  .board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+  .board-col {
+    background: #f5f0ea; border: 2px solid #1a1a1a; border-radius: 14px;
+    min-height: 200px; box-shadow: 5px 5px 0 #1a1a1a;
+  }
+  .board-col-header {
+    padding: 14px 18px; border-radius: 12px 12px 0 0; background: #fff;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .board-col-header-left { display: flex; align-items: center; gap: 8px; }
+  .board-col-header svg { width: 18px; height: 18px; stroke-width: 2.5; flex-shrink: 0; }
+  .board-col-header h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.04em; line-height: 1; }
+  .board-col-header .count { font-size: 0.7rem; font-weight: 900; padding: 3px 10px; border: 2px solid #1a1a1a; border-radius: 7px; background: #fff; }
+  .col-cards { padding: 14px; display: flex; flex-direction: column; gap: 12px; min-height: 80px; }
+  .col-empty {
+    text-align: center; padding: 24px 12px; font-size: 0.75rem; font-weight: 700;
+    color: #bbb; text-transform: uppercase; letter-spacing: 0.06em;
   }
 
   /* ── Card ── */
   .card {
-    background: #fff;
-    border: 2px solid #1a1a1a;
-    border-radius: 14px;
-    box-shadow: 5px 5px 0 #1a1a1a;
-    padding: 24px 28px;
-    margin-top: 24px;
+    background: #fefcf9; border: 2px solid #1a1a1a; border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: slideIn 0.3s ease-out both;
+    cursor: grab;
   }
-  .card h2 {
-    font-size: 1rem; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.06em; margin-bottom: 18px;
-    color: #555;
+  .card:active { cursor: grabbing; }
+  .card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .card.dragging { opacity: 0.3; }
+  .col-cards.drag-over { background: #f0ebe3; border-radius: 10px; }
+  .card-color { display: block; height: 4px; border-radius: 10px 10px 0 0; }
+  .color-dreaming { background: #8b7e74; }
+  .color-planning { background: #f0a500; }
+  .color-visited  { background: #4a9e6f; }
+  .card-body { padding: 14px 16px 10px; cursor: pointer; }
+  .card-body h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; font-weight: 400; letter-spacing: 0.02em; line-height: 1.1; color: #1a1a1a; }
+  .card-body .loc { font-size: 0.7rem; font-weight: 700; color: #999; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
+  .card-body .loc svg { width: 10px; height: 10px; }
+  .card-body .note {
+    font-size: 0.75rem; font-weight: 600; line-height: 1.5; color: #555;
+    padding: 8px 10px; margin-top: 8px; background: #f8f5f0; border-radius: 8px;
+  }
+  .card-foot {
+    padding: 8px 12px 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .card-foot .cselect-trigger {
+    padding: 5px 10px; font-size: 0.65rem; border-radius: 7px; border-width: 1.5px;
+    min-width: 0; flex: 1;
+  }
+  .card-foot .cselect-trigger svg { width: 10px; height: 10px; }
+  .card-foot .cselect-trigger.open { transform: translateY(-1px); box-shadow: 2px 2px 0 #ff3366; }
+  .card-foot .cselect-menu { border-width: 1.5px; border-radius: 8px; box-shadow: 3px 3px 0 #1a1a1a; }
+  .card-foot .cselect-opt { padding: 6px 10px; font-size: 0.65rem; border-bottom-width: 1px; }
+  .btn-del {
+    background: #fff; border: 1.5px solid #1a1a1a; color: #1a1a1a;
+    padding: 5px 8px; border-radius: 7px; font-size: 0.65rem; font-weight: 800;
+    cursor: pointer; transition: background 0.15s, transform 0.15s;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .btn-del:hover { background: #ff3366; color: #fff; transform: translateY(-1px); }
+  .btn-del svg { width: 12px; height: 12px; }
+  .btn-edit {
+    background: #fff; border: 1.5px solid #1a1a1a; color: #1a1a1a;
+    padding: 5px 8px; border-radius: 7px; font-size: 0.65rem; font-weight: 800;
+    cursor: pointer; transition: background 0.15s, transform 0.15s;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .btn-edit:hover { background: #f0a500; color: #fff; transform: translateY(-1px); }
+  .btn-edit svg { width: 12px; height: 12px; }
+  .btn-cancel { background: #fff; color: #1a1a1a; }
+
+  @media (max-width: 900px) {
+    .board-grid { grid-template-columns: 1fr; gap: 16px; }
+    .board-col { min-height: auto; }
   }
 
-  /* ── Field ── */
-  .field { margin-bottom: 20px; }
-  .field:last-child { margin-bottom: 0; }
-  .field label, .field-legend {
-    display: block;
-    font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.05em; margin-bottom: 8px; color: #777;
-  }
-  fieldset { border: none; }
-  .field-legend { padding: 0; }
-
-  /* ── Radio Group ── */
-  .radio-group {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-  }
-  .radio-card {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    padding: 10px 8px;
-    border: 2px solid #1a1a1a; border-radius: 10px;
-    background: #fefcf9;
-    cursor: pointer;
-    transition: transform 0.12s, box-shadow 0.12s;
-    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.04em;
-    text-align: center;
-  }
-  .radio-card:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 #1a1a1a; }
-  .radio-card input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .radio-card:has(input:checked) {
-    background: #1a1a1a; color: #fff; transform: translateY(-2px);
-    box-shadow: 3px 3px 0 #4fc3a1;
-  }
-  .radio-card:focus-within { outline: 3px solid #4fc3a1; outline-offset: 2px; }
-
-  /* ── Weight Input ── */
-  .weight-row {
-    display: flex; gap: 8px; align-items: stretch;
-  }
-  .weight-row input {
-    flex: 1; padding: 11px 14px;
-    border: 2px solid #1a1a1a; border-radius: 10px;
-    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
-    background: #fefcf9; color: #1a1a1a; outline: none;
-    min-width: 0;
-  }
-  .weight-row input:focus {
-    border-color: #4fc3a1; box-shadow: 0 0 0 3px rgba(79,195,161,0.25);
-  }
-  .weight-row input::placeholder { font-weight: 600; color: #bbb; }
-  .unit-btn {
-    padding: 0 18px;
-    border: 2px solid #1a1a1a; border-radius: 10px;
-    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 800;
-    background: #fff; color: #1a1a1a; cursor: pointer;
-    transition: background 0.12s, transform 0.12s;
-    text-transform: uppercase; letter-spacing: 0.04em;
-  }
-  .unit-btn:hover { background: #f0ede8; transform: translateY(-1px); }
-  .unit-btn:focus-visible { outline: 3px solid #4fc3a1; outline-offset: 2px; }
-
-  .error-msg {
-    font-size: 0.7rem; font-weight: 700; color: #e53935;
-    margin-top: 6px; min-height: 1em;
-  }
-
-  /* ── Results ── */
-  .psi-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  }
-  .psi-box {
-    background: #f8f5f0; border: 2px solid #1a1a1a; border-radius: 10px;
-    padding: 16px;
-    text-align: center;
-  }
-  .psi-box .wheel-label {
-    font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.08em; color: #999;
-  }
-  .psi-box .psi-value {
-    font-size: 2rem; font-weight: 900; letter-spacing: -0.02em;
-    margin-top: 2px;
-    color: #1a1a1a;
-  }
-  .psi-box .psi-unit {
-    font-size: 0.75rem; font-weight: 700; color: #999;
-  }
-  .psi-placeholder {
-    text-align: center; padding: 24px 12px;
-    font-size: 0.8rem; font-weight: 600; color: #bbb;
-  }
-
-  /* ── Bar ── */
-  .bar-section { margin-top: 20px; }
-  .bar-section h3 {
-    font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.06em; color: #999; margin-bottom: 10px;
-  }
-  .bar-track {
-    position: relative; height: 28px;
-    background: #e0d8d0; border: 2px solid #1a1a1a; border-radius: 8px;
-    overflow: hidden;
-  }
-  .bar-zone {
-    position: absolute; top: 0; height: 100%;
-    border-radius: 0;
-    transition: left 0.2s, width 0.2s;
-  }
-  .bar-too-low { background: #ffcdd2; left: 0; }
-  .bar-ideal   { background: #a5d6a7; z-index: 1; }
-  .bar-too-high { background: #ffcdd2; right: 0; }
-  .bar-marker {
-    position: absolute; top: 50%; transform: translate(-50%, -50%);
-    width: 14px; height: 14px; border-radius: 50%;
-    border: 2px solid #1a1a1a; z-index: 2;
-    transition: left 0.2s;
-  }
-  .bar-marker.front { background: #1a1a1a; }
-  .bar-marker.rear  { background: #fff; }
-  .bar-labels {
-    display: flex; justify-content: space-between;
-    font-size: 0.6rem; font-weight: 700; color: #999;
-    margin-top: 4px; text-transform: uppercase;
-  }
-  .bar-legend {
-    display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap;
-  }
-  .bar-legend span {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 0.6rem; font-weight: 700; color: #666;
-  }
-  .bar-legend .dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    border: 1.5px solid #1a1a1a; flex-shrink: 0;
-  }
-
-  /* ── Check ── */
-  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .check-field { margin-bottom: 0; }
-  .check-field label {
-    font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.05em; color: #999; margin-bottom: 6px;
-  }
-  .check-field input {
-    width: 100%; padding: 10px 12px;
-    border: 2px solid #1a1a1a; border-radius: 8px;
-    font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700;
-    background: #fefcf9; color: #1a1a1a; outline: none;
-  }
-  .check-field input:focus {
-    border-color: #4fc3a1; box-shadow: 0 0 0 3px rgba(79,195,161,0.25);
-  }
-  .check-field input::placeholder { font-weight: 600; color: #ccc; }
-  .check-status {
-    font-size: 0.75rem; font-weight: 700; margin-top: 6px;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .check-status .badge {
-    display: inline-block; padding: 2px 8px; border-radius: 5px;
-    font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
-    border: 1.5px solid #1a1a1a;
-  }
-  .badge-under { background: #ffcdd2; color: #c62828; }
-  .badge-ideal { background: #a5d6a7; color: #2e7d32; }
-  .badge-over  { background: #ffcdd2; color: #c62828; }
-  .check-tip {
-    font-size: 0.7rem; font-weight: 600; color: #888;
-    margin-top: 2px; font-style: italic;
-  }
-
-  .check-empty {
-    grid-column: 1 / -1;
-    text-align: center; padding: 16px;
-    font-size: 0.7rem; font-weight: 600; color: #bbb;
-    text-transform: uppercase; letter-spacing: 0.05em;
-  }
-
-  /* ── Responsive ── */
   @media (max-width: 600px) {
-    .radio-group { grid-template-columns: repeat(2, 1fr); }
-    .psi-grid, .check-grid { grid-template-columns: 1fr; }
-    .card { padding: 18px 16px; }
-    .hero h1 { font-size: 1.8rem; }
-  }
-
-  @media (max-width: 400px) {
-    .radio-group { grid-template-columns: 1fr 1fr; }
-    .weight-row { flex-direction: column; }
-    .unit-btn { padding: 10px; }
+    .hero { padding-top: 14px; }
+    .hero-card { height: auto; min-height: 200px; margin: 0 14px; }
+    .hero-content { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .hero h1 { font-size: 2.8rem; }
+    .hero-big { padding: 10px 18px; align-self: stretch; display: flex; align-items: center; gap: 10px; }
+    .hero-big-num { font-size: 2rem; }
+    .hero-big-label { margin-top: 0; }
+    .hero-big-num { font-size: 2rem; }
+    .hero-stats { padding: 10px 0; }
+    .hero-stat { min-width: auto; flex: 1; padding: 4px 14px 4px 4px; gap: 10px; }
+    .hero-stat-icon { width: 30px; height: 30px; }
+    .hero-stat-icon svg { width: 14px; height: 14px; }
+    .hero-stat-info .label { font-size: 0.55rem; }
+    .hero-stat-info .num { font-size: 1.3rem; }
+    .form-inner { padding-top: 8px; padding-bottom: 6px; }
+    .form-inner input, .cselect-trigger { font-size: 0.8rem; padding: 9px 10px; }
+    .btn { padding: 9px 16px; font-size: 0.8rem; }
+    .board-wrap { border-radius: 14px 14px 0 0; padding-bottom: 24px; }
+    .board { padding: 6px 0 0; }
+    .col-cards { padding: 10px; gap: 10px; }
   }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="container">
-    <h1>PSI <span>Pilot</span></h1>
-    <p class="sub">Find your ideal tire pressure — just pick your bike and enter your weight.</p>
+<section class="hero">
+  <div class="container hero-inner-wrap">
+    <div class="hero-card">
+      <div class="hero-bg">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-tag"><i data-feather="compass"></i> Explore the world</div>
+          <h1>Wander<span>list</span></h1>
+          <p class="sub">Your dream destinations, collected in one place</p>
+        </div>
+        <div class="hero-big">
+          <div class="hero-big-num" id="totalCount">0</div>
+          <span class="hero-big-label">Destinations</span>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
+  <div class="hero-stats">
+    <div class="container" id="statsBar"></div>
+  </div>
+</section>
 
-<main class="container">
-
-  <!-- ── Setup ── -->
-  <section class="card" aria-labelledby="setupTitle">
-    <h2 id="setupTitle">Your Setup</h2>
-
-    <fieldset class="field">
-      <legend class="field-legend">Bike Type</legend>
-      <div class="radio-group" role="radiogroup" aria-label="Bike type">
-        <label class="radio-card">
-          <input type="radio" name="bikeType" value="road">
-          <span>Road</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="bikeType" value="mountain">
-          <span>MTB</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="bikeType" value="gravel">
-          <span>Gravel</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="bikeType" value="hybrid">
-          <span>Hybrid</span>
-        </label>
+<div class="board-wrap">
+  <section class="form-section">
+    <div class="container form-inner">
+      <input type="text" id="inputName" placeholder="Destination" autocomplete="off">
+      <input type="text" id="inputCountry" placeholder="Country" autocomplete="off">
+      <input type="text" id="inputNote" placeholder="Why go?" autocomplete="off">
+      <div class="cselect" id="formStatusSelect">
+        <button class="cselect-trigger" data-value="Dreaming">
+          <span>Dreaming</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cselect-menu">
+          <button class="cselect-opt selected" data-value="Dreaming">Dreaming</button>
+          <button class="cselect-opt" data-value="Planning">Planning</button>
+          <button class="cselect-opt" data-value="Visited">Visited</button>
+        </div>
       </div>
-    </fieldset>
-
-    <div class="field">
-      <label for="weightInput">Body Weight</label>
-      <div class="weight-row">
-        <input type="number" id="weightInput" min="1" max="350" step="0.5" placeholder="e.g. 70" autocomplete="off" aria-describedby="weightError">
-        <button class="unit-btn" id="unitToggle" aria-label="Switch unit between kilograms and pounds" type="button">kg</button>
-      </div>
-      <p class="error-msg" id="weightError" role="alert"></p>
+      <button class="btn btn-primary" id="btnAdd">+ Add</button>
+      <button class="btn btn-cancel" id="btnCancel" style="display:none">Cancel</button>
     </div>
   </section>
 
-  <!-- ── Recommended ── -->
-  <section class="card" aria-labelledby="resultTitle">
-    <h2 id="resultTitle">Recommended Pressure</h2>
-    <div id="resultBody">
-      <p class="psi-placeholder">Select bike type and enter your weight</p>
+  <section class="board">
+    <div class="container">
+      <div class="board-grid" id="boardGrid"></div>
     </div>
   </section>
-
-  <!-- ── Pressure Check ── -->
-  <section class="card" aria-labelledby="checkTitle">
-    <h2 id="checkTitle">Check Your Pressure</h2>
-    <div id="checkBody">
-      <p class="psi-placeholder">Select bike type and enter your weight first</p>
-    </div>
-  </section>
-
-</main>
+</div>
 
 <script>
 (function() {
-  'use strict';
+  const STORAGE_KEY = 'wanderlist_destinations';
+  let destinations = [];
 
-  /* ── Data ── */
-  const PRESSURE_DATA = {
-    road: {
-      label: 'Road',
-      maxBar: 140,
-      brackets: [
-        { max: 60, front: [80, 90], rear: [85, 95] },
-        { max: 85, front: [90, 100], rear: [95, 105] },
-        { max: Infinity, front: [100, 115], rear: [105, 120] },
-      ]
-    },
-    mountain: {
-      label: 'Mountain',
-      maxBar: 60,
-      brackets: [
-        { max: 60, front: [25, 30], rear: [28, 33] },
-        { max: 85, front: [28, 33], rear: [30, 35] },
-        { max: Infinity, front: [30, 37], rear: [33, 40] },
-      ]
-    },
-    gravel: {
-      label: 'Gravel',
-      maxBar: 80,
-      brackets: [
-        { max: 60, front: [35, 42], rear: [38, 45] },
-        { max: 85, front: [42, 48], rear: [45, 52] },
-        { max: Infinity, front: [48, 55], rear: [52, 58] },
-      ]
-    },
-    hybrid: {
-      label: 'Hybrid',
-      maxBar: 90,
-      brackets: [
-        { max: 60, front: [40, 47], rear: [43, 50] },
-        { max: 85, front: [47, 54], rear: [50, 57] },
-        { max: Infinity, front: [54, 62], rear: [57, 65] },
-      ]
-    }
-  };
-
-  const TIPS = {
-    under: {
-      front: "Too low up front — you risk pinch flats. Add some air!",
-      rear: "Rear's looking soft. Pump it up for better efficiency."
-    },
-    ideal: {
-      front: "Front pressure is spot on. Smooth ride ahead!",
-      rear: "Rear pressure is perfect. Roll on!"
-    },
-    over: {
-      front: "Front's too hard — you're losing traction. Let a little out.",
-      rear: "Rear's overinflated. Drop a few PSI for better grip."
-    }
-  };
-
-  /* ── State ── */
-  let bikeType = null;
-  let weightKg = null;
-  let unit = 'kg'; // 'kg' or 'lbs'
-
-  /* ── DOM refs ── */
   const $ = id => document.getElementById(id);
-  const weightInput = $('weightInput');
-  const unitToggle = $('unitToggle');
-  const weightError = $('weightError');
-  const resultBody = $('resultBody');
-  const checkBody = $('checkBody');
-  const bikeRadios = document.querySelectorAll('input[name="bikeType"]');
+  const inputName = $('inputName');
+  const inputCountry = $('inputCountry');
+  const inputNote = $('inputNote');
+  const btnAdd = $('btnAdd');
+  const boardGrid = $('boardGrid');
+  const totalCount = $('totalCount');
+  const statsBar = $('statsBar');
+  const formStatusSelect = $('formStatusSelect');
+  const btnCancel = $('btnCancel');
 
-  /* ── Utils ── */
-  function toKg(val, u) {
-    return u === 'kg' ? val : val * 0.453592;
-  }
-  function toUnit(val, u) {
-    return u === 'kg' ? val : val / 0.453592;
-  }
+  let formStatusValue = 'Dreaming';
+  let editingId = null;
 
-  function findBracket(type, weightKg) {
-    const bike = PRESSURE_DATA[type];
-    if (!bike) return null;
-    for (const b of bike.brackets) {
-      if (weightKg <= b.max) return b;
-    }
-    return null;
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      destinations = raw ? JSON.parse(raw) : [];
+    } catch { destinations = []; }
   }
 
-  function classifyPressure(psi, range) {
-    if (psi < range[0]) return 'under';
-    if (psi > range[1]) return 'over';
-    return 'ideal';
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(destinations));
+  }
+
+  function nextId() {
+    return destinations.length ? Math.max(...destinations.map(d => d.id)) + 1 : 1;
+  }
+
+  function addDestination(name, country, note, status) {
+    destinations.push({ id: nextId(), name, country, note, status });
+    save();
+    render();
+  }
+
+  function updateStatus(id, newStatus) {
+    const d = destinations.find(d => d.id === id);
+    if (d) { d.status = newStatus; save(); render(); }
+  }
+
+  function deleteDestination(id) {
+    if (!confirm('Remove this destination?')) return;
+    destinations = destinations.filter(d => d.id !== id);
+    save();
+    render();
   }
 
   function esc(s) {
@@ -410,230 +444,233 @@
     return div.innerHTML;
   }
 
-  /* ── Validate ── */
-  function validateWeight(val) {
-    if (val === '' || val == null) return '';
-    const n = parseFloat(val);
-    if (isNaN(n) || n <= 0) return 'Enter a positive number.';
-    if (unit === 'kg' && (n < 15 || n > 350)) return 'Enter a weight between 15–350 kg.';
-    if (unit === 'lbs' && (n < 33 || n > 770)) return 'Enter a weight between 33–770 lbs.';
-    return '';
+  function initCustomSelect(container, onChange) {
+    const trigger = container.querySelector('.cselect-trigger');
+    const menu = container.querySelector('.cselect-menu');
+    const span = trigger.querySelector('span');
+
+    function close() {
+      menu.classList.remove('open');
+      trigger.classList.remove('open');
+    }
+
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = menu.classList.contains('open');
+      document.querySelectorAll('.cselect-menu.open').forEach(m => {
+        if (m !== menu) m.classList.remove('open');
+      });
+      document.querySelectorAll('.cselect-trigger.open').forEach(t => {
+        if (t !== trigger) t.classList.remove('open');
+      });
+      if (isOpen) { close(); return; }
+      menu.classList.add('open');
+      trigger.classList.add('open');
+    });
+
+    menu.querySelectorAll('.cselect-opt').forEach(opt => {
+      opt.addEventListener('click', function() {
+        const value = this.getAttribute('data-value');
+        span.textContent = this.textContent;
+        trigger.setAttribute('data-value', value);
+        menu.querySelectorAll('.cselect-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        close();
+        if (onChange) onChange(value);
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!container.contains(e.target)) close();
+    });
   }
 
-  /* ── Render ── */
+  function setSelectValue(container, value) {
+    const trigger = container.querySelector('.cselect-trigger');
+    const span = trigger.querySelector('span');
+    trigger.setAttribute('data-value', value);
+    const opts = container.querySelectorAll('.cselect-opt');
+    opts.forEach(o => {
+      if (o.getAttribute('data-value') === value) {
+        span.textContent = o.textContent;
+        o.classList.add('selected');
+      } else {
+        o.classList.remove('selected');
+      }
+    });
+  }
+
   function render() {
-    const raw = weightInput.value.trim();
-    const err = validateWeight(raw);
-    weightError.textContent = err;
+    totalCount.textContent = destinations.length;
 
-    let selectedType = null;
-    bikeRadios.forEach(r => { if (r.checked) selectedType = r.value; });
-    bikeType = selectedType;
+    const cols = [
+      { key: 'Dreaming', icon: 'circle', label: 'Dreaming' },
+      { key: 'Planning', icon: 'check', label: 'Planning' },
+      { key: 'Visited', icon: 'check-circle', label: 'Visited' }
+    ];
 
-    if (err) {
-      resultBody.innerHTML = `<p class="psi-placeholder">${esc(err)}</p>`;
-      checkBody.innerHTML = `<p class="psi-placeholder">Fix the weight field first</p>`;
-      return;
-    }
+    const icons = { Dreaming: 'circle', Planning: 'check', Visited: 'check-circle' };
+    const barClass = { Dreaming: 'color-dreaming', Planning: 'color-planning', Visited: 'color-visited' };
 
-    if (!bikeType || raw === '') {
-      resultBody.innerHTML = `<p class="psi-placeholder">Select bike type and enter your weight</p>`;
-      checkBody.innerHTML = `<p class="psi-placeholder">Select bike type and enter your weight first</p>`;
-      return;
-    }
+    const counts = { Dreaming: 0, Planning: 0, Visited: 0 };
+    destinations.forEach(d => counts[d.status]++);
 
-    const kg = parseFloat(raw);
-    if (isNaN(kg)) {
-      resultBody.innerHTML = `<p class="psi-placeholder">Enter a valid weight</p>`;
-      checkBody.innerHTML = `<p class="psi-placeholder">Enter a valid weight</p>`;
-      return;
-    }
-    weightKg = unit === 'kg' ? kg : toKg(kg, 'kg');
-
-    const bracket = findBracket(bikeType, weightKg);
-    if (!bracket) {
-      resultBody.innerHTML = `<p class="psi-placeholder">No data for this weight range</p>`;
-      checkBody.innerHTML = `<p class="psi-placeholder">No data for this weight range</p>`;
-      return;
-    }
-
-    const [fLow, fHigh] = bracket.front;
-    const [rLow, rHigh] = bracket.rear;
-    const bike = PRESSURE_DATA[bikeType];
-    const maxBar = bike.maxBar;
-
-    // Results
-    resultBody.innerHTML = `
-      <div class="psi-grid">
-        <div class="psi-box">
-          <div class="wheel-label">Front</div>
-          <div class="psi-value">${fLow}–${fHigh}</div>
-          <div class="psi-unit">PSI</div>
-        </div>
-        <div class="psi-box">
-          <div class="wheel-label">Rear</div>
-          <div class="psi-value">${rLow}–${rHigh}</div>
-          <div class="psi-unit">PSI</div>
+    statsBar.innerHTML = cols.map(c => `
+      <div class="hero-stat">
+        <div class="hero-stat-icon icon-${c.key.toLowerCase()}"><i data-feather="${c.icon}"></i></div>
+        <div class="hero-stat-info">
+          <span class="label">${c.label}</span>
+          <span class="num num-${c.key.toLowerCase()}">${counts[c.key]}</span>
         </div>
       </div>
-      <div class="bar-section">
-        <h3>Pressure Range</h3>
-        ${renderBar(fLow, fHigh, rLow, rHigh, maxBar)}
-      </div>
-    `;
+    `).join('');
 
-    // Check
-    const frontVal = $('frontCurrent') ? $('frontCurrent').value : '';
-    const rearVal = $('rearCurrent') ? $('rearCurrent').value : '';
-    checkBody.innerHTML = `
-      <div class="check-grid">
-        <div class="check-field">
-          <label for="frontCurrent">Front Wheel (PSI)</label>
-          <input type="number" id="frontCurrent" min="0" max="160" step="0.5" placeholder="e.g. ${fLow}" autocomplete="off" aria-describedby="frontStatus">
-          <p class="check-status" id="frontStatus"></p>
-          <p class="check-tip" id="frontTip"></p>
-        </div>
-        <div class="check-field">
-          <label for="rearCurrent">Rear Wheel (PSI)</label>
-          <input type="number" id="rearCurrent" min="0" max="160" step="0.5" placeholder="e.g. ${rLow}" autocomplete="off" aria-describedby="rearStatus">
-          <p class="check-status" id="rearStatus"></p>
-          <p class="check-tip" id="rearTip"></p>
-        </div>
-      </div>
-    `;
+    const optValues = ['Dreaming', 'Planning', 'Visited'];
 
-    // Restore previous values if any
-    if (frontVal) $('frontCurrent').value = frontVal;
-    if (rearVal) $('rearCurrent').value = rearVal;
+    boardGrid.innerHTML = cols.map(c => {
+      const items = destinations.filter(d => d.status === c.key);
+      return `
+        <div class="board-col" data-status="${c.key}" ondragover="event.preventDefault()" ondragenter="this.classList.add('drag-over')" ondragleave="if(!this.contains(event.relatedTarget))this.classList.remove('drag-over')" ondrop="window.__drop(event)">
+          <div class="board-col-header">
+            <div class="board-col-header-left">
+              <i data-feather="${c.icon}"></i>
+              <h3>${c.label}</h3>
+            </div>
+            <span class="count">${items.length}</span>
+          </div>
+          <div class="col-cards">
+            ${items.length ? items.map(d => `
+              <div class="card" draggable="true" data-id="${d.id}" ondragstart="window.__dragStart(event,${d.id})" ondragend="this.classList.remove('dragging')">
+                <span class="card-color ${barClass[d.status]}"></span>
+                <div class="card-body" onclick="window.__cycle(${d.id})" title="Click to promote">
+                  <h4>${esc(d.name)}</h4>
+                  <div class="loc"><i data-feather="map-pin"></i> ${esc(d.country)}</div>
+                  ${d.note ? `<p class="note">${esc(d.note)}</p>` : ''}
+                </div>
+                <div class="card-foot">
+                  <div class="cselect" data-id="${d.id}">
+                    <button class="cselect-trigger" data-value="${esc(d.status)}">
+                      <span>${esc(d.status)}</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="cselect-menu">
+                      ${optValues.map(v => `<button class="cselect-opt${v === d.status ? ' selected' : ''}" data-value="${v}">${v}</button>`).join('')}
+                    </div>
+                  </div>
+                  <button class="btn-edit" onclick="window.__edit(${d.id})" title="Edit"><i data-feather="edit-3"></i></button>
+                  <button class="btn-del" onclick="window.__delete(${d.id})"><i data-feather="trash-2"></i></button>
+                </div>
+              </div>`).join('')
+            : `<div class="col-empty">No destinations</div>`}
+          </div>
+        </div>`;
+    }).join('');
 
-    // Wire check inputs
-    $('frontCurrent').addEventListener('input', updateCheck);
-    $('rearCurrent').addEventListener('input', updateCheck);
+    if (typeof feather !== 'undefined') feather.replace();
 
-    // Run check if values exist
-    if (frontVal || rearVal) updateCheck();
+    document.querySelectorAll('.cselect').forEach(el => {
+      if (el.id === 'formStatusSelect') return;
+      if (el.dataset.initialized) return;
+      el.dataset.initialized = '1';
+      const id = parseInt(el.getAttribute('data-id'));
+      initCustomSelect(el, function(val) {
+        window.__update(id, val);
+      });
+    });
   }
 
-  function renderBar(fLow, fHigh, rLow, rHigh, maxBar) {
-    const idealStart = Math.min(fLow, rLow);
-    const idealEnd = Math.max(fHigh, rHigh);
-    const pStart = (idealStart / maxBar) * 100;
-    const pWidth = ((idealEnd - idealStart) / maxBar) * 100;
-    const pLowEnd = (idealStart / maxBar) * 100;
-    const pHighStart = (idealEnd / maxBar) * 100;
-
-    return `
-      <div class="bar-track" role="img" aria-label="Pressure bar from 0 to ${maxBar} PSI, ideal zone ${idealStart} to ${idealEnd} PSI">
-        <div class="bar-zone bar-too-low" style="width:${pLowEnd}%"></div>
-        <div class="bar-zone bar-ideal" style="left:${pStart}%;width:${pWidth}%"></div>
-        <div class="bar-zone bar-too-high" style="left:${pHighStart}%;width:${100-pHighStart}%"></div>
-        <div class="bar-marker front" style="left:${pStart}%"></div>
-        <div class="bar-marker rear" style="left:${pStart + pWidth/2}%"></div>
-      </div>
-      <div class="bar-labels">
-        <span>0</span>
-        <span>${maxBar} PSI</span>
-      </div>
-      <div class="bar-legend">
-        <span><span class="dot" style="background:#ffcdd2"></span> Too low</span>
-        <span><span class="dot" style="background:#a5d6a7"></span> Ideal</span>
-        <span><span class="dot" style="background:#ffcdd2"></span> Too high</span>
-        <span><span class="dot" style="background:#1a1a1a"></span> Front range</span>
-        <span><span class="dot" style="background:#fff;border-color:#1a1a1a"></span> Rear range</span>
-      </div>
-    `;
+  function resetForm() {
+    inputName.value = ''; inputCountry.value = ''; inputNote.value = '';
+    setSelectValue(formStatusSelect, 'Dreaming');
+    formStatusValue = 'Dreaming';
+    editingId = null;
+    btnAdd.textContent = '+ Add';
+    btnCancel.style.display = 'none';
+    inputName.focus();
   }
 
-  function updateCheck() {
-    const bike = PRESSURE_DATA[bikeType];
-    if (!bike || weightKg == null) return;
-    const bracket = findBracket(bikeType, weightKg);
-    if (!bracket) return;
-    const [fLow, fHigh] = bracket.front;
-    const [rLow, rHigh] = bracket.rear;
-    const maxBar = bike.maxBar;
-
-    const frontVal = parseFloat($('frontCurrent').value);
-    const rearVal = parseFloat($('rearCurrent').value);
-
-    // Update bar markers
-    const frontMarker = document.querySelector('.bar-marker.front');
-    const rearMarker = document.querySelector('.bar-marker.rear');
-    if (frontMarker) {
-      const p = isNaN(frontVal) ? (Math.min(fLow, rLow) / maxBar) * 100 : Math.min((frontVal / maxBar) * 100, 100);
-      frontMarker.style.left = p + '%';
+  function handleAdd() {
+    const name = inputName.value.trim();
+    const country = inputCountry.value.trim();
+    const note = inputNote.value.trim();
+    const status = formStatusValue;
+    if (!name || !country) return;
+    if (editingId !== null) {
+      const d = destinations.find(d => d.id === editingId);
+      if (d) {
+        d.name = name; d.country = country; d.note = note; d.status = status;
+        save(); render();
+      }
+      resetForm();
+    } else {
+      addDestination(name, country, note, status);
     }
-    if (rearMarker) {
-      const p = isNaN(rearVal) ? (Math.max(fHigh, rHigh) / maxBar) * 100 : Math.min((rearVal / maxBar) * 100, 100);
-      rearMarker.style.left = p + '%';
-    }
-
-    // Update status + tip per wheel
-    updateWheel('front', frontVal, bracket.front);
-    updateWheel('rear', rearVal, bracket.rear);
+    resetForm();
   }
 
-  function updateWheel(wheel, val, range) {
-    const statusEl = $(wheel + 'Status');
-    const tipEl = $(wheel + 'Tip');
-    if (!statusEl) return;
+  let draggedId = null;
 
-    if (isNaN(val) || val === '' || val < 0) {
-      statusEl.innerHTML = '';
-      tipEl.textContent = '';
-      return;
-    }
-
-    const cls = classifyPressure(val, range);
-    const labels = { under: 'Underinflated', ideal: 'Ideal', over: 'Overinflated' };
-    const badgeCls = { under: 'badge-under', ideal: 'badge-ideal', over: 'badge-over' };
-    const emoji = { under: '\u26A0\uFE0F', ideal: '\u2705', over: '\u26A0\uFE0F' };
-
-    statusEl.innerHTML = `<span class="badge ${badgeCls[cls]}">${emoji[cls]} ${labels[cls]}</span>`;
-    statusEl.style.color = cls === 'ideal' ? '#2e7d32' : '#c62828';
-    tipEl.textContent = TIPS[cls][wheel];
+  function cycleStatus(id) {
+    const d = destinations.find(d => d.id === id);
+    if (!d) return;
+    const order = ['Dreaming', 'Planning', 'Visited'];
+    const idx = order.indexOf(d.status);
+    d.status = idx === order.length - 1 ? order[0] : order[idx + 1];
+    save(); render();
   }
 
-  /* ── Events ── */
-  function onInputChange() {
-    const raw = weightInput.value.trim();
-    const kg = parseFloat(raw);
-    if (raw === '' || isNaN(kg) || kg <= 0) {
-      weightKg = null;
+  window.__cycle = cycleStatus;
+
+  window.__edit = function(id) {
+    const d = destinations.find(d => d.id === id);
+    if (!d) return;
+    inputName.value = d.name;
+    inputCountry.value = d.country;
+    inputNote.value = d.note || '';
+    editingId = d.id;
+    btnAdd.textContent = 'Update';
+    btnCancel.style.display = '';
+    setSelectValue(formStatusSelect, d.status);
+    formStatusValue = d.status;
+    inputName.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.__dragStart = function(e, id) {
+    draggedId = id;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  window.__drop = function(e) {
+    e.preventDefault();
+    const col = e.currentTarget;
+    col.classList.remove('drag-over');
+    if (draggedId === null) return;
+    const newStatus = col.getAttribute('data-status');
+    const d = destinations.find(d => d.id === draggedId);
+    if (d && d.status !== newStatus) {
+      d.status = newStatus;
+      save();
       render();
-      return;
     }
-    weightKg = unit === 'kg' ? kg : toKg(kg, 'kg');
-    render();
-  }
+    draggedId = null;
+  };
 
-  weightInput.addEventListener('input', onInputChange);
+  window.__update = updateStatus;
+  window.__delete = deleteDestination;
 
-  unitToggle.addEventListener('click', function() {
-    const raw = weightInput.value.trim();
-    const currentVal = parseFloat(raw);
-    const newUnit = unit === 'kg' ? 'lbs' : 'kg';
-
-    if (!isNaN(currentVal) && currentVal > 0) {
-      weightInput.value = Math.round(toUnit(currentVal, newUnit) * 10) / 10;
-    }
-
-    unit = newUnit;
-    unitToggle.textContent = unit;
-    unitToggle.setAttribute('aria-label', 'Switch unit between kilograms and pounds');
-
-    if (weightInput.value.trim()) {
-      onInputChange();
-    }
+  initCustomSelect(formStatusSelect, function(val) {
+    formStatusValue = val;
   });
 
-  bikeRadios.forEach(r => r.addEventListener('change', function() {
-    bikeType = this.value;
-    if (weightInput.value.trim()) onInputChange();
-    else render();
-  }));
+  btnAdd.addEventListener('click', handleAdd);
+  btnCancel.addEventListener('click', resetForm);
+  [inputName, inputCountry, inputNote].forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') handleAdd(); });
+  });
 
-  /* ── Init ── */
+  load();
   render();
 })();
 </script>
