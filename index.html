@@ -160,9 +160,9 @@
     border-radius: 0;
     transition: left 0.2s, width 0.2s;
   }
-  .bar-too-low { background: #ffcdd2; left: 0; }
+  .bar-too-low { background: #ffe0b2; left: 0; }
   .bar-ideal   { background: #a5d6a7; z-index: 1; }
-  .bar-too-high { background: #ffcdd2; right: 0; }
+  .bar-too-high { background: #ef9a9a; right: 0; }
   .bar-marker {
     position: absolute; top: 50%; transform: translate(-50%, -50%);
     width: 14px; height: 14px; border-radius: 50%;
@@ -214,9 +214,9 @@
     font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
     border: 1.5px solid #1a1a1a;
   }
-  .badge-under { background: #ffcdd2; color: #c62828; }
+  .badge-under { background: #ffe0b2; color: #e65100; }
   .badge-ideal { background: #a5d6a7; color: #2e7d32; }
-  .badge-over  { background: #ffcdd2; color: #c62828; }
+  .badge-over  { background: #ef9a9a; color: #c62828; }
   .check-tip {
     font-size: 0.7rem; font-weight: 600; color: #888;
     margin-top: 2px; font-style: italic;
@@ -530,19 +530,19 @@
         <div class="bar-zone bar-too-low" style="width:${pLowEnd}%"></div>
         <div class="bar-zone bar-ideal" style="left:${pStart}%;width:${pWidth}%"></div>
         <div class="bar-zone bar-too-high" style="left:${pHighStart}%;width:${100-pHighStart}%"></div>
-        <div class="bar-marker front" style="left:${pStart}%"></div>
-        <div class="bar-marker rear" style="left:${pStart + pWidth/2}%"></div>
+        <div class="bar-marker front" style="left:0%" hidden></div>
+        <div class="bar-marker rear" style="left:100%" hidden></div>
       </div>
       <div class="bar-labels">
         <span>0</span>
         <span>${maxBar} PSI</span>
       </div>
       <div class="bar-legend">
-        <span><span class="dot" style="background:#ffcdd2"></span> Too low</span>
+        <span><span class="dot" style="background:#ffe0b2"></span> Too low</span>
         <span><span class="dot" style="background:#a5d6a7"></span> Ideal</span>
-        <span><span class="dot" style="background:#ffcdd2"></span> Too high</span>
-        <span><span class="dot" style="background:#1a1a1a"></span> Front range</span>
-        <span><span class="dot" style="background:#fff;border-color:#1a1a1a"></span> Rear range</span>
+        <span><span class="dot" style="background:#ef9a9a"></span> Too high</span>
+        <span><span class="dot" style="background:#1a1a1a"></span> Front</span>
+        <span><span class="dot" style="background:#fff;border-color:#1a1a1a"></span> Rear</span>
       </div>
     `;
   }
@@ -563,12 +563,20 @@
     const frontMarker = document.querySelector('.bar-marker.front');
     const rearMarker = document.querySelector('.bar-marker.rear');
     if (frontMarker) {
-      const p = isNaN(frontVal) ? (Math.min(fLow, rLow) / maxBar) * 100 : Math.min((frontVal / maxBar) * 100, 100);
-      frontMarker.style.left = p + '%';
+      if (isNaN(frontVal) || frontVal < 0) {
+        frontMarker.hidden = true;
+      } else {
+        frontMarker.hidden = false;
+        frontMarker.style.left = Math.min((frontVal / maxBar) * 100, 100) + '%';
+      }
     }
     if (rearMarker) {
-      const p = isNaN(rearVal) ? (Math.max(fHigh, rHigh) / maxBar) * 100 : Math.min((rearVal / maxBar) * 100, 100);
-      rearMarker.style.left = p + '%';
+      if (isNaN(rearVal) || rearVal < 0) {
+        rearMarker.hidden = true;
+      } else {
+        rearMarker.hidden = false;
+        rearMarker.style.left = Math.min((rearVal / maxBar) * 100, 100) + '%';
+      }
     }
 
     // Update status + tip per wheel
