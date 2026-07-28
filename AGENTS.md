@@ -27,7 +27,7 @@ Pressure brackets (weight in kg):
 - Font: Inter (400–900) — loaded from Google Fonts
 - Color palette: dark navy hero (`#1a1a2e`), teal-green accent (`#4fc3a1`), warm beige background (`#f2ece4`)
 - Status colors: red (`#ffcdd2`) for under/over, green (`#a5d6a7`) for ideal
-- Container: `max-width: 720px; padding: 0 20px;`
+- Container: `max-width: 960px; padding: 0 20px;`
 
 ## What is NOT here
 
