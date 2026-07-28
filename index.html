@@ -42,17 +42,18 @@
     border: 2px solid #1a1a1a;
     border-radius: 14px;
     box-shadow: 5px 5px 0 #1a1a1a;
-    padding: 24px 28px;
+    padding: 24px 0 28px;
     margin-top: 24px;
   }
   .card h2 {
     font-size: 1rem; font-weight: 800; text-transform: uppercase;
     letter-spacing: 0.06em; margin-bottom: 18px;
     color: #555;
+    padding: 0 28px;
   }
 
   /* ── Field ── */
-  .field { margin-bottom: 20px; }
+  .field { margin-bottom: 20px; padding: 0 28px; }
   .field:last-child { margin-bottom: 0; }
   .field label, .field-legend {
     display: block;
@@ -120,6 +121,7 @@
   /* ── Results ── */
   .psi-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    padding: 0 28px;
   }
   .psi-box {
     background: #f8f5f0; border: 2px solid #1a1a1a; border-radius: 10px;
@@ -139,12 +141,12 @@
     font-size: 0.75rem; font-weight: 700; color: #999;
   }
   .psi-placeholder {
-    text-align: center; padding: 24px 12px;
+    text-align: center; padding: 24px 28px;
     font-size: 0.8rem; font-weight: 600; color: #bbb;
   }
 
   /* ── Bar ── */
-  .bar-section { margin-top: 20px; }
+  .bar-section { margin-top: 20px; padding: 0 28px; }
   .bar-section h3 {
     font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
     letter-spacing: 0.06em; color: #999; margin-bottom: 10px;
@@ -188,7 +190,7 @@
   }
 
   /* ── Check ── */
-  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 28px; }
   .check-field { margin-bottom: 0; }
   .check-field label {
     font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
@@ -232,7 +234,7 @@
   @media (max-width: 600px) {
     .radio-group { grid-template-columns: repeat(2, 1fr); }
     .psi-grid, .check-grid { grid-template-columns: 1fr; }
-    .card { padding: 18px 16px; }
+    .card { padding: 18px 0 22px; }
     .hero h1 { font-size: 1.8rem; }
   }
 
