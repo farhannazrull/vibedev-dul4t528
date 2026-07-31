@@ -43,6 +43,18 @@ Semua `<input>` harus punya `<label for="id">` eksplisit (jangan cuma placeholde
 - [ ] Event listener: perhatikan duplikasi — kasih flag atau delegasi kalo render ulang
 - [ ] `render()` jangan campur logic dengan DOM mutation (pisah compute vs render)
 - [ ] JSDoc minimal di function publik: parameter + return type
+- [ ] **JSDoc JANGAN cuma signature** — deklarasikan shapes buat object kompleks:
+
+```js
+/**
+ * @typedef {{ id: string, title: string, status: 'unlistened'|'listened', createdAt: string }} Episode
+ * @param {Episode[]} episodes
+ * @returns {Episode[]}
+ */
+function filterUnlistened(episodes) { ... }
+```
+
+Judge potong poin karena "parameter shapes and return types for complex objects not declared anywhere". Kalau pake `typescript`/`// @ts-check` + JSDoc — nilai Technical Craft naik.
 
 ## 5. Arsitektur (biar judge nilai Technical Craft tinggi)
 
@@ -62,17 +74,27 @@ Kalo pake modules (`<script type="module">`) — nilai Technical Craft naik dras
 
 ## 6. Automation (extra credit)
 
-- [ ] Minimal 1 test file: test pure functions dengan `console.assert()`
+- [ ] Minimal 1 test file: test pure functions
+- [ ] **JANGAN cuma `console.assert`** — di Node dia TIDAK throw pas fail, exit code tetap 0, jadi CI ga akan nangkep regresi. Judge pernah potong karena ini.
+- [ ] Pakai test runner sederhana yang nge-throw:
 
 ```js
-// quick-test.js
-console.assert(classifyPressure(80, [90,110]) === 'under', 'under test');
-console.assert(classifyPressure(100, [90,110]) === 'ideal', 'ideal test');
-console.assert(classifyPressure(120, [90,110]) === 'over', 'over test');
+// quick-test.js (vanilla, no deps, still throws on failure)
+function test(name, fn) {
+  try { fn(); console.log('PASS', name); }
+  catch (e) { console.error('FAIL', name, e.message); process.exitCode = 1; }
+}
+test('classify under', () => {
+  if (classifyPressure(80, [90,110]) !== 'under') throw new Error('expected under');
+});
+test('classify ideal', () => {
+  if (classifyPressure(100, [90,110]) !== 'ideal') throw new Error('expected ideal');
+});
 ```
 
-Bisa di-run pake `node quick-test.js` atau buka di browser.
-Judge lihat effort testing = poin tambahan **meskipun brief ga minta**.
+Run: `node quick-test.js`. Kalau fail → exit code 1 → CI/judge nangkep.
+Bonus: install `vitest`/`node:test` kalau boleh — skor Technical Craft naik drastis.
+- [ ] Tests harus pure functions — makanya logic dipisah dari DOM biar bisa di-test.
 
 ## 7. Final sanity check (sebelum submit)
 
@@ -87,6 +109,21 @@ Judge lihat effort testing = poin tambahan **meskipun brief ga minta**.
 [ ] Keyboard navigation: Tab through all controls
 [ ] Screen reader: forms announce correctly
 ```
+
+## 8. Extra credit — "beyond the brief" (dari project skor 85/89)
+
+Project podcast-queue dapat **Problem Solving 85** & **Completeness 89** karena ini:
+- [ ] Inline editing (edit langsung di tempat, tanpa page reload)
+- [ ] Real-time search/filter yang langsung re-render
+- [ ] Karakter counter di input
+- [ ] Smooth reorder animation (FLIP technique) tanpa library
+- [ ] Visual treatment khusus buat status selesai (strikethrough + muted color + reduced shadow)
+- [ ] Empty-state **adaptif**: copy beda antara "benar-benar kosong" vs "ke-filter habis"
+- [ ] Header status line: total count + count yang belum selesai
+- [ ] Human-readable date dibangun dari stored ISO timestamp
+- [ ] localStorage dibaca di init + ditulis setelah SETIAP mutation
+
+Pattern yang bikin menang: **fitur brief lengkap + 2-3 fitur bonus yang nyambung sama use case**.
 
 ---
 
